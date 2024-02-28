@@ -12,15 +12,13 @@ function App() {
 
   useEffect(() => {
     const fetchPhotos = async () => {
-      let data;
+      let data = [];
 
       const storedPhotos = localStorage.getItem("photos");
       if (storedPhotos) {
         data = JSON.parse(storedPhotos);
       } else {
-        const response = await fetch(
-          "https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&count=10"
-        );
+        const response = await fetch("https://api.nasa.gov/planetary/apod?api_key=q8z9508cYj74PFrpbvIV2Bso73b0DZ8QE7KAhYqd&count=10");
         data = await response.json();
         localStorage.setItem("photos", JSON.stringify(data));
       }
@@ -46,12 +44,6 @@ function App() {
 
   const removeFavorite = (photo) => {
     setFavorites(favorites.filter((favorite) => favorite.date !== photo.date));
-    localStorage.setItem(
-      "favorites",
-      JSON.stringify(
-        favorites.filter((favorite) => favorite.date !== photo.date)
-      )
-    );
   };
 
   const toggleFavorite = (photo) => {
@@ -84,7 +76,7 @@ function App() {
             filterActive={filterFavorites}
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {filteredPhotos.map((photo) => (
+            {Array.isArray(filteredPhotos) && filteredPhotos.map((photo) => (
               <PhotoCard
                 key={photo.date}
                 photo={photo}
@@ -95,7 +87,7 @@ function App() {
                 )}
               />
             ))}
-          </div>{" "}
+          </div>
         </>
       )}
     </div>
